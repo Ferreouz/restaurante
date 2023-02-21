@@ -33,7 +33,8 @@ class BigCard extends Component
 
 
         // CARD PEQUENO
-        $this->pedidos = Pedido::whereDate('created_at', $this->today)
+        $this->pedidos = Pedido::with('usuarios_pedidos')
+        ->whereDate('created_at', $this->today)
         ->orWhere(function ($q) use($ys){
             $q->whereNotIn('situacao', [3,4])
             ->whereDate('created_at', $ys);

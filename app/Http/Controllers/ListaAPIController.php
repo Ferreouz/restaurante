@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class ListaAPIController extends Controller
 {
-   
+   public $erro = ['erro' => 1];
     /**
      * Display a listing of the resource.
      *
@@ -62,7 +62,8 @@ class ListaAPIController extends Controller
      */
     public function buscarProduto($id){
         if ( filter_var($id, FILTER_VALIDATE_INT) === false ) {
-            return ['mensagem' => 'Produto não encontrado!'];
+            // return ['mensagem' => 'Produto não encontrado!'];
+            return $this->erro;
         }
         $user_id = auth()->user()->id;
         try{
@@ -73,10 +74,12 @@ class ListaAPIController extends Controller
             $produto = Produtos::where('lista_id', $lista_ativada->id)->skip($numero)->first();
 
             if(!$produto){
-                return ['mensagem' => 'Produto não encontrado!'];
+                // return ['mensagem' => 'Produto não encontrado!'];
+                return $this->erro;
             }
             if($produto->ativado_hoje === 0){
-                return ['mensagem' => 'Esse produto esta indisponível no momento!'];
+                // return ['mensagem' => 'Esse produto esta indisponível no momento!'];
+                return $this->erro;
             }
             $valor = (float) number_format( $produto->valor/ 100, 2, '.');
             $reposta = [
@@ -86,7 +89,8 @@ class ListaAPIController extends Controller
             ];
             return $reposta;
         }catch (\Exception $e){
-            return ['erro' => 'Ocorreu um erro ao buscar esse produto'];
+            // return ['erro' => 'Ocorreu um erro ao buscar esse produto'];
+            return $this->erro;
         }
 
        
@@ -99,7 +103,8 @@ class ListaAPIController extends Controller
      */
     public function buscarBebida($id){
         if ( filter_var($id, FILTER_VALIDATE_INT) === false ) {
-            return ['mensagem' => 'Bebida não encontrada!'];
+            // return ['mensagem' => 'Bebida não encontrada!'];
+            return $this->erro;
         }
         $user_id = auth()->user()->id;
         try{
@@ -109,10 +114,12 @@ class ListaAPIController extends Controller
             $reposta = "";
 
             if(!$bebida){
-                return ['mensagem' => 'Bebida não encontrada!'];
+                // return ['mensagem' => 'Bebida não encontrada!'];
+                return $this->erro;
             }
             if($bebida->ativado_hoje === 0){
-                return ['mensagem' => 'Essa bebida esta indisponível no momento!'];
+                // return ['mensagem' => 'Essa bebida esta indisponível no momento!'];
+                return $this->erro;
             }
 
             $valor = (float) number_format( $bebida->valor/ 100, 2, '.');
@@ -125,7 +132,8 @@ class ListaAPIController extends Controller
             return $reposta;
 
         }catch (\Exception $e){
-            return ['erro' => 'Ocorreu um erro ao buscar essa bebida'];
+            // return ['erro' => 'Ocorreu um erro ao buscar essa bebida'];
+            return $this->erro;
         }
 
     }
@@ -243,7 +251,8 @@ class ListaAPIController extends Controller
             
         }catch (\Exception $e) {
             DB::rollBack();
-            return ['mensagem' => 'erro ao fazer pedido'];   
+            // return ['mensagem' => 'erro ao fazer pedido'];  
+            return $this->erro; 
         }
      
 
