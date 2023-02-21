@@ -59,22 +59,3 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/authenticate', [LoginController::class, 'authenticate']);
-
-// Route::get('/createNewUser', function(){
-//     $token = Str::random(60);
- 
-
-//     $user = User::create([
-//         'name' => 'teste2',
-//         'email' => 'teste2@teste.com',
-//         'password' => bcrypt('Password123') 
-//     ]);
-//     return $user->createToken($token)->plainTextToken;
-// });
-
-  // ->withHeaders([
-        //     'Acess-Control-Allow-Origin' => 'http://localhost:8090',
-        //     'Acess-Control-Allow-Methods' => 'POST,GET',
-        //     'Acess-Control-Allow-Headers' => 'Content-Type, Authorization',
-        //     'Acess-Control-Max-Age' => '86400',
-        // ])
