@@ -26,6 +26,8 @@ Route::group(['middleware' => ['auth:sanctum']],function(){
     Route::get('/produto/{id}',[ListaAPIController::class, 'buscarProduto']);
     Route::get('/bebida/{id}',[ListaAPIController::class, 'buscarBebida']);
     Route::post('/pedido',[ListaAPIController::class, 'store']);
+
+    Route::get('/fotinha',[ListaAPIController::class, 'fotinha']);
 });
 
 // Route::get('create');

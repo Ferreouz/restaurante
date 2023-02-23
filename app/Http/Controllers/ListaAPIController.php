@@ -8,6 +8,7 @@ use App\Helpers\MyHelpers;
 use Illuminate\Http\Request;
 use App\Models\ListaProdutos;
 use App\Models\UsuariosPedidos;
+use App\Http\Controllers\Poster;
 use Illuminate\Support\Facades\DB;
 
 class ListaAPIController extends Controller
@@ -53,6 +54,15 @@ class ListaAPIController extends Controller
     
         $imagemBebidas = env('APP_URL') .  "/" . 'storage/bebidas_'. $user_id  . '.png';
         return ['data' => $data, 'bebidas'=> $holder, 'imagem' => $cardapio, 'imagem_bebidas' => $imagemBebidas] ;
+    }
+
+    public function fotinha()
+    {
+        //user logado
+        $user_id = auth()->user()->id;
+
+       
+        return ['url'=> env('APP_URL') .  "/" . Poster::fotinha()];
     }
 
     /**

@@ -46,4 +46,11 @@ class Poster extends Controller
         return $retorno;
 
     }
+    public static function fotinha(){
+        
+        $response = Http::get('http://localhost:5000');
+        
+        return $response;
+
+    }
 }
