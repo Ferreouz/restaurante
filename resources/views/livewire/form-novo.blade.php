@@ -1,4 +1,10 @@
 <div>
+
+  {{-- @if($guarnicoes_option)
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css">
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>
+  @endif --}}
+
     <div class="row">
       
 
@@ -69,7 +75,7 @@
       
       <div class="form-floating col-3">
         <input type="text" class="form-control" id="floatingObservacao" name="observacao" >
-        <label for="floatingObservacao">Observação</label>
+        <label for="floatingObservacao">Observação Geral</label>
     </div>
        
           <div class="p-3"></div> 
@@ -81,7 +87,7 @@
 {{-- Produto  --}}
       @foreach($produtos as $index => $produto)
 
-            <div class="form-floating col-3">
+            <div class="form-floating col-2">
               <select required class="form-select" id="floatingTipo[{{$index}}]" 
               name="produtos[{{$index}}][tipo]" 
               wire:model="produtos.{{$index}}.tipo"
@@ -130,13 +136,28 @@
               <label for="floatingOpcao[{{$index}}]">Detalhes</label>
             </div>
 
-            {{-- <div class="form-floating col-3">
-                <input type="text" class="form-control" id="floatingOpcao[{{$index}}]" 
-                name="produtos[{{$index}}][opcao]" wire:model="produtos.{{$index}}.opcao">
-                <label for="floatingOpcao[{{$index}}]">Detalhes/Opcao</label>
-            </div> --}}
             
-          <div class="form-floating col-3">
+              @if($guarnicoes_option)
+               <div class="form-floating col-3">
+                      <select 
+                      {{-- class="form-select"  --}}
+                      {{-- style="overflow-y: auto" --}}
+                      id="floatingGuarnicao[{{$index}}]" 
+                      name="produtos[{{$index}}][guarnicoes][]"
+                      multiple
+                      {{-- wire:change="mudarDetalhe({{$index}})" --}}
+                      {{-- aria-label="Floating label select example" --}}
+                      >
+                      <option value="" selected>-Escolha pelo menos uma Guarnicoes-</option>
+
+                      @foreach($guarnicoes as $guarnicao)
+                          <option value="{{$guarnicao['nome']}}">{{$guarnicao['nome']}}</option>
+                      @endforeach
+
+                      </select>
+                  </div>
+                @endif
+          <div class="form-floating col-2">
               <input type="text" class="form-control" id="floatingValor[{{$index}}]"
                name="produtos[{{$index}}][valorUnitario]" 
                wire:model.lazy="produtos.{{$index}}.valorUnitario"
@@ -152,7 +173,7 @@
               <label for="floatingValor[{{$index}}]">Valor Unitario</label>
           </div>
 
-          <div class="form-floating col-2">
+          <div class="form-floating col-1">
             <input type="number" class="form-control" id="floatingQTD[{{$index}}]" 
             name="produtos[{{$index}}][quantidade]" 
             wire:model.lazy="produtos.{{$index}}.quantidade"

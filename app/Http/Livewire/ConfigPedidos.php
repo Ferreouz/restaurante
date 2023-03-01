@@ -6,6 +6,8 @@ use App\Models\Bebidas;
 use Livewire\Component;
 use App\Models\Produtos;
 use App\Helpers\MyHelpers;
+use App\Models\ConfigUser;
+use App\Models\Guarnicoes;
 use App\Models\ListaProdutos;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
@@ -18,8 +20,8 @@ class ConfigPedidos extends Component
     {
         $this->userLogado = auth()->user()->id;
         $this->bebidaPath = 'storage/bebidas_'.  $this->userLogado  . '.png';
+
         //Lista
-    
         $lps = ListaProdutos::all();
 
         foreach($lps as $lp){
@@ -59,6 +61,23 @@ class ConfigPedidos extends Component
                     'botaoSalvar' => 0,
                 ];
 	    }
+       
+        $config = ConfigUser::where('chave', 'guarnicoes')->first();
+
+        if($config){
+            $this->guarnicoes_option = true;
+            $guarnicoes = Guarnicoes::all();
+
+            foreach($guarnicoes as $guarnicao){
+                $this->guarnicoes[] = 
+                    [
+                        'id' => $guarnicao->id,
+                        'nome' => $guarnicao->nome,
+                        'botaoSalvar' => 0,
+                    ];
+            }
+        }
+     
        
     }
 
@@ -295,7 +314,63 @@ class ConfigPedidos extends Component
             $this->total = $total + MyHelpers::formatPreco($this->frete);
         }
     }
-    
+    //Guarnicoes
+    public $guarnicoes = [];
+    public $guarnicoes_option = false;
+
+    public function addGuarnicao()
+    {
+        $this->guarnicoes[] = [
+            'id' => '',
+            'nome' =>'',
+            'botaoSalvar' => 1,
+        ];
+
+    }
+    public function botaoSalvarGuarnicao($index)
+    {
+        $this->guarnicoes[$index]['botaoSalvar'] = 1;
+    }
+
+    public function salvarGuarnicao($index){
+        try{
+       
+            if($this->guarnicoes[$index]['id'] == ""){
+                Guarnicoes::insert(  [
+                    'user_id' =>  $this->userLogado,
+                    'nome' => $this->guarnicoes[$index]['nome'],
+                ]);
+                $this->guarnicoes[$index]['id'] = DB::getPdo()->lastInsertId();
+            }else {
+                DB::table('guarnicoes')
+                ->updateOrInsert(
+                    ['id' => $this->guarnicoes[$index]['id'], 'user_id' =>  $this->userLogado ],
+                    [
+                        'user_id' =>  $this->userLogado,
+                        'nome' => $this->guarnicoes[$index]['nome'],
+                    ]
+                );
+            }
+             $this->guarnicoes[$index]['botaoSalvar'] = 0;
+
+        }catch(Exception $e){
+
+        }//
+    }
+    public function deleteGuarnicao($index)
+    {
+        try{
+            $deleted = Guarnicoes::where('id', $this->guarnicoes[$index]['id'])->delete();
+
+            unset($this->guarnicoes[$index]);
+            $this->guarnicoes = array_values($this->guarnicoes);
+        }catch(\Exception $e){
+            //
+        }
+   
+    }
+
+
     public function render()
     {
         return view('livewire.config-pedidos');

@@ -12,6 +12,11 @@ class PedidoNovoController extends Controller
     public function postPedido(Request $request){
         //conta logada
         $user_id = auth()->user()->id;
+        
+        if(!isset($request->produtos)){
+            return redirect()->back()->with('message', 'Erro ao adicionar Pedido!');   
+        }
+
 
         //caso nao esteja selecionado um usuario cadastrado
         if($request->user_cadastrado === NULL){
@@ -65,9 +70,17 @@ class PedidoNovoController extends Controller
 
             ]);
 
-            foreach($request->produtos as $index => $produto){
-                DB::insert('insert into produtos_pedidos (user_id,pedidos_id,tipo,opcao,quantidade,valor) 
-                values (?, ?, ?, ?, ?, ?)', 
+            foreach($request->produtos as $index =>  $produto){
+                $todas_guarnicoes = "";
+                if(array_key_exists('guarnicoes',$produto) && $produto["tipo"] != "Bebida"){
+                    foreach($produto['guarnicoes'] as $guarnicao){
+                        if($guarnicao == "")
+                            continue;
+                        $todas_guarnicoes .= $guarnicao . "|";
+                    }
+                }
+                DB::insert('insert into produtos_pedidos (user_id,pedidos_id,tipo,opcao,quantidade,valor,guarnicoes) 
+                values (?, ?, ?, ?, ?, ?, ?)', 
                 [
                     $user_id,
                     $idPedido, 
@@ -75,6 +88,7 @@ class PedidoNovoController extends Controller
                     $produto["opcao"],
                     $produto["quantidade"],   
                     MyHelpers::formatPreco($produto["valorUnitario"]),
+                    $todas_guarnicoes,
                 ]);
             }
           

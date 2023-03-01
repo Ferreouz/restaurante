@@ -13,17 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('produtos_pedidos', function (Blueprint $table) {
+        Schema::create('guarnicoes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->foreignId('pedidos_id');
-            
-            $table->string('tipo');
-            $table->text('opcao')->nullable();
-            $table->text('guarnicoes')->nullable();
-            $table->integer('quantidade')->default('1');
-            $table->integer('valor');
-           // $table->timestamps();
+            $table->string('nome');
         });
     }
 
@@ -34,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('produtos_pedidos');
+        Schema::dropIfExists('guarnicoes');
     }
 };

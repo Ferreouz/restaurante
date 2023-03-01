@@ -6,6 +6,8 @@ use App\Models\Bebidas;
 // use App\Models\Produtos;
 use Livewire\Component;
 use App\Helpers\MyHelpers;
+use App\Models\ConfigUser;
+use App\Models\Guarnicoes;
 use App\Models\ListaProdutos;
 use App\Models\UsuariosPedidos;
 use Illuminate\Support\Facades\DB;
@@ -74,6 +76,21 @@ class FormNovo extends Component
                 $this->usuarios[$usuario->id] = [$usuario->nome. " ".$usuario->whatsapp. " ". $usuario->endereco]; 
             }
         }
+        
+        $config = ConfigUser::where('chave', 'guarnicoes')->first();
+
+        if($config){
+            $this->guarnicoes_option = true;
+            $guarnicoes = Guarnicoes::all();
+
+            foreach($guarnicoes as $guarnicao){
+                $this->guarnicoes[] = 
+                    [
+                        'id' => $guarnicao->id,
+                        'nome' => $guarnicao->nome,
+                    ];
+            }
+        }
         // dd($this->usuarios);
        
     }
@@ -118,7 +135,9 @@ class FormNovo extends Component
             $this->total = $total + MyHelpers::formatPreco($this->frete);
         }
     }
-
+    //Guarnicoes
+    public $guarnicoes = [];
+    public $guarnicoes_option = false;
 
     public function render()
     {

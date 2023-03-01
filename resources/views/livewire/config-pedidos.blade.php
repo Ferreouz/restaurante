@@ -85,7 +85,7 @@ src="
     <form>
         @csrf
         <div class="card-header d-flex justify-content-between"> 
-            <h5 class="card-title">LISTA tal</h5>
+            <h5 class="card-title">LISTA</h5>
             
             <button type="button"
             
@@ -232,6 +232,9 @@ src="
         </form>
         
     </div>
+    <div class="row">
+
+   
     <div class="card text-bg-light mb-3" style="width: 18rem;">
         <img class="card-img-top" width="180" height="400"
         src="{{$bebidaPath}}"
@@ -247,7 +250,52 @@ src="
             <button type="submit" class="btn btn-primary" >Salvar Cardapio Bebidas</button>
         </form>
        </div>
-    </div> 
+    </div>
+    {{-- Guarnicoes --}}
+    @if($guarnicoes_option)
+
+    <div class="card text-bg-light mb-3" style="width: 15rem;">
+        <div class="card-header d-flex justify-content-between"> 
+            <h5 class="card-title">Guarnicoes</h5>
+                   
+           <button type="button"
+           wire:click="addGuarnicao"
+            class="btn btn-secondary">
+               <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+               <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+               </svg>
+           </button></div>
+
+         <div class="card-body">
+
+            @foreach($guarnicoes as $index => $guarnicao)
+
+                <div class="form-floating col">
+                    <input type="text" class="form-control" 
+                    id="floatingNomeG{{$index}}" 
+                    wire:change="botaoSalvarGuarnicao({{$index}})" 
+                    wire:model.lazy="guarnicoes.{{$index}}.nome"
+                    >
+                    <label for="floatingNomeG{{$index}}">Nome</label>
+                </div>
+
+                    <a  wire:click="salvarGuarnicao({{$index}})" class="btn link-success @if($guarnicao['botaoSalvar'] == 0) disabled @endif"
+                    style="border: none"  href="#">Salvar</a>
+                    <a style="border: none" href="#" class="btn link-danger"
+                    onclick="confirm('Tem certeza que deseja deletar essa Guarnicao?') || event.stopImmediatePropagation()"
+                    wire:click="deleteGuarnicao({{$index}})"
+                    >Deletar</a>
+
+                <div class="p-3"></div> 
+
+
+            @endforeach
+
+       </div>
+    </div>
+    @endif 
+     {{-- END Guarnicoes --}}
+</div>
 </div>
 
 {{-- END BEBIDAS  --}}

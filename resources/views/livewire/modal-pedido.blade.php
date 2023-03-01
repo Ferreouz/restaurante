@@ -32,13 +32,16 @@
           <p><strong> Detalhes:</strong></p>
           @if(isset($pedido->produtos_pedidos))
             @foreach ($pedido->produtos_pedidos as $produto)
-              {{$produto->quantidade . "X ". $produto->tipo . " " .$produto->opcao}}
-              <br>
+            <p class="float-start" > {{$produto->quantidade . "X ". $produto->tipo. " " .$produto->opcao." - ".$produto->guarnicoes ?? ""}}</p>
+             
+              {{-- <br> --}}
               <p class="float-end"> Valor Unitario: R$ {{number_format($produto->valor/ 100, 2, ',','')}}</p>
               <br>
             @endforeach
           @endif
           <br>
+          <br>
+
 
           @if(isset($pedido->observacao))
               <p> <strong>Observacao: </strong>  {{$pedido->observacao}}</p>

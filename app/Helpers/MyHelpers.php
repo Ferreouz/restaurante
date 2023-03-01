@@ -7,8 +7,9 @@ class MyHelpers {
     public static function formatarImpressao($pedido){
         $ListaPedido = "";
         foreach($pedido->produtos_pedidos as $produto){
+            $guarnicao = $produto->guarnicoes ?? "";
             $ListaPedido .= $produto->quantidade . "X ";
-            $ListaPedido .= $produto->tipo ." ". $produto->opcao."\n";
+            $ListaPedido .= $produto->tipo ." ". $produto->opcao.  " -\n" .$guarnicao."\n";
             $ListaPedido .= "                 Valor Unitario: R$ " . number_format($produto->valor/ 100, 2, ',','');
             $ListaPedido .= "\n";
         }
